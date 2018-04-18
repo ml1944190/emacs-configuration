@@ -1,0 +1,124 @@
+
+;;[2018-04-16 Mon 09:45]
+;;We configure Emacs in this file!
+
+;; comment starts with ';'((package-initialize)
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  )
+(require 'cl)
+;;cl stands for common lisp
+;;add whatever packages you want here
+(defvar xiaohenge/packages '(
+			     company
+			     monokai-theme
+			     hungry-delete
+			     elpy
+			     ein
+			     better-defaults
+			     flycheck
+			     py-autopep8
+			     )
+  "Default pacakages")
+
+(defun xiaohenge/packages-installed-p()
+  (loop for pkg in xiaohenge/packages
+	when (not (package-installed-p pkg)) do (return nil)
+	finally (return t)))
+
+(unless (xiaohenge/packages-installed-p)
+  (message "%s" "Refreshing package database...")
+  (package-refresh-contents)
+  (dolist (pkg xiaohenge/packages)
+    (when (not (package-installed-p pkg))
+      (package-install pkg))))
+
+;;======================this is for latex============================
+     (add-to-list 'load-path
+              "~/.emacs.d/lisps/auctex/site-lisp/site-start.d")
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
+(if (string-equal system-type "windows-nt")
+    (require 'tex-mik))
+
+ (mapc (lambda (mode)
+         (add-hook 'LaTeX-mode-hook mode))
+         (list 'auto-fill-mode
+               'LaTeX-math-mode
+               'turn-on-reftex
+               'linum-mode))
+(setq TeX-file-line-error nil)
+
+
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                 ; display compilation windows
+                (TeX-global-PDF-mode t)       ; PDF mode enable, not plain
+                (setq TeX-save-query nil)
+                (imenu-add-menubar-index)
+                (define-key LaTeX-mode-map (kbd "TAB") 'TeX-complete-symbol)))
+;;======================latex============================
+
+
+;;====================this is for python ====================
+
+(elpy-enable)
+(elpy-use-ipython)
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
+;;====================PYTHON=================================
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(global-linum-mode t)
+(setq inhibit-splash-screen t)
+(load-theme 'monokai t)
+(delete-selection-mode t)
+(global-hl-line-mode)
+;; ===================hook==============================
+(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+(require 'hungry-delete)
+(global-hungry-delete-mode)
+
+
+(defun open-my-init-file ()
+  (interactive)
+  (find-file "~/.emacs.d/init.el")
+  )
+
+(global-set-key (kbd "<f2>") 'open-my-init-file)
+
+(global-company-mode t)
+
+
+(setq-default cursor-type 'bar)
+;; inhibit backup
+(setq make-backup-files nil)
+(setq initial-frame-alist (quote ((fullscreen . maximized))))
+
+
+(require 'org)
+(setq org-src-frontify-natively )
+
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(TeX-electric-math nil)
+ '(TeX-engine (quote default)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
