@@ -20,6 +20,9 @@
 			     ein
 			     better-defaults
 			     py-autopep8
+			     auctex
+			     cdlatex
+			     
 			     )
   "Default pacakages")
 
