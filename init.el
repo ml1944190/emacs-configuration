@@ -38,13 +38,7 @@
     (when (not (package-installed-p pkg))
       (package-install pkg))))
 
-;;====================this is for shorcuts====================
-(global-set-key (kbd "M-3") 'delete-other-windows)
-(global-set-key (kbd "M-4") 'split-window-right)
-(global-set-key (kbd "M-$") 'split-window-below)
-(global-set-key (kbd "M-RET") 'other-window)
-(global-set-key (kbd "M-0") 'delete-windw)
-(global-set-key (kbd "M-7") 'recentf-open-files)
+
 ;;====================End shortcuts===========================
 
 ;;====================This is for e-mail=======================
@@ -79,7 +73,6 @@
      (add-to-list 'load-path
               "~/.emacs.d/lisps/auctex/site-lisp/site-start.d")
 (load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
 (if (string-equal system-type "windows-nt")
     (require 'tex-mik))
 
